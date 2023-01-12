@@ -1,0 +1,4 @@
+{
+  "database": "schedule.sqlite3",
+  "courses_url": "https://api.devhub.virginia.edu/v1/courses"
+}
