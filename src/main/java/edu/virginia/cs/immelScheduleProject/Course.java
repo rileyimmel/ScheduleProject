@@ -18,12 +18,27 @@ public class Course {
         this.name = name;
     }
 
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
     public int getNumber() {
         return number;
     }
 
     public void setNumber(int number) {
         this.number = number;
+    }
+    public int getSection() {
+        return section;
+    }
+
+    public void setSection(int section) {
+        this.section = section;
     }
 
     public double getCredits() {
@@ -42,12 +57,19 @@ public class Course {
         this.instructor = instructor;
     }
 
-    public String getTime() {
-        return time;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public String getDays() {
@@ -68,26 +90,35 @@ public class Course {
 
     private int course_id;
     private String name;
+
+    private String subject;
     private int number;
     private double credits;
     private String instructor;
-    private String time;
+    private String startTime;
+
+    private String endTime;
     private String days;
     private String location;
 
-    public Course(int course_id, String name, int number, double Credits, String instructor, String time, String days, String location){
+    private int section;
+
+    public Course(int course_id, String name, String subject, int number, int section, /*double Credits,*/ String instructor, String startTime, String endTime, String days/*, String location*/){
         this.course_id = course_id;
         this.name = name;
+        this.subject = subject;
         this.number = number;
-        this.credits = Credits;
+        this.section = section;
+//        this.credits = Credits;
         this.instructor = instructor;
-        this.time = time;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.days = days;
-        this.location = location;
+//        this.location = location;
     }
     @Override
     public String toString(){
-        return "Course ID: " + course_id + " Name: " + name + " Number: " + number + " Credits: " + credits + " Instructor: " + instructor + " Time: " + time + " Days: " + days + " Location: " + location;
+        return "Course ID: " + course_id + " Name: " + name + " Subject: " + subject + " Number: " + number + " Section: " + section +/*" Credits: " + credits +*/ " Instructor: " + instructor + " Start Time: " + startTime + " End Time: " + endTime + " Days: " + days /*+ " Location: " + location*/;
     }
 
 
