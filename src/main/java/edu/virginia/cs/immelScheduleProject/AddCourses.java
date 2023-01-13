@@ -15,9 +15,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddCourses {
+
+
+    ArrayList<Integer> dupeIDS = new ArrayList<Integer>();
 
     public List<Course> getCourses(){
        try{
@@ -26,7 +30,7 @@ public class AddCourses {
            JSONObject allCourses = new JSONObject(json);
            JSONObject test = allCourses.getJSONObject("class_schedules");
            JSONArray courses = test.getJSONArray("records");
-           for(int i = 0; i < 1/*courses.length()*/; i++) {
+           for(int i = 0; i < courses.length(); i++) {
                try {
                    JSONArray course = courses.getJSONArray(i);
                    Course newCourse = getCourseFromJSON(course);
@@ -36,6 +40,7 @@ public class AddCourses {
                    continue;
                }
            }
+           System.out.println(dupeIDS);
            System.out.println(courses.length());
 
 //           System.out.println(courses);
@@ -60,7 +65,7 @@ public class AddCourses {
         String days = course.getString(8);
 
         Course newCourse = new Course(courseID, name, subject, number, section, instructor, startTime, endTime, days);
-        System.out.println(newCourse);
+//        System.out.println(newCourse);
         return newCourse;
     }
 
@@ -104,6 +109,7 @@ public class AddCourses {
                 stmt.setString(6, days);
                 stmt.execute();
             } catch (SQLException e){
+                dupeIDS.add(course_id);
                 e.printStackTrace();
             }
         }

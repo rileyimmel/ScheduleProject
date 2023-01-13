@@ -15,7 +15,9 @@ public class ScheduleDatabaseManager {
         try{
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + ConfigSingleton.getInstance().getDatabaseFilename());
-            System.out.println("Connected to database");
+            Statement statement = connection.createStatement();
+            statement.execute("PRAGMA foreign_keys = ON");
+//            System.out.println("Connected to database");
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println("Error with database connection");
             e.printStackTrace();
@@ -34,7 +36,6 @@ public class ScheduleDatabaseManager {
                 throw new IllegalStateException("Connection is " + (connection == null ? "null" : "closed"));
             } else{
                 Statement statement = connection.createStatement();
-                statement.execute("PRAGMA foreign_keys=ON");
                 ResultSet rs = statement.executeQuery(checkForTables);
                 if(rs.getInt(1) > 0){
                     throw new IllegalStateException("Tables already exist");
@@ -94,15 +95,15 @@ public class ScheduleDatabaseManager {
             if (connection == null || connection.isClosed()) {
                 throw new IllegalStateException("Connection is " + (connection == null ? "null" : "closed"));
             } else {
-                String query = "DROP TABLE IF EXISTS student";
                 Statement statement = connection.createStatement();
-                statement.execute(query);
-                query = "DROP TABLE IF EXISTS course";
-                statement.execute(query);
-                query = "DROP TABLE IF EXISTS section";
-                statement.execute(query);
-                query = "DROP TABLE IF EXISTS schedule";
-                statement.execute(query);
+                ArrayList<String> dropTableSQL = new ArrayList<>();
+                dropTableSQL.add("DROP TABLE IF EXISTS course");
+                dropTableSQL.add("DROP TABLE IF EXISTS section");
+                dropTableSQL.add("DROP TABLE IF EXISTS schedule");
+                dropTableSQL.add("DROP TABLE IF EXISTS student");
+                for(String dropTableQuery : dropTableSQL) {
+                    statement.execute(dropTableQuery);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -131,7 +132,8 @@ public class ScheduleDatabaseManager {
 
         return """
                 CREATE TABLE IF NOT EXISTS course(
-                    course_id INTEGER PRIMARY KEY NOT NULL UNIQUE,
+                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    course_id INTEGER NOT NULL,
                     name VARCHAR(255) NOT NULL,
                     subject VARCHAR(255) NOT NULL,
                     number VARCHAR(255) NOT NULL
