@@ -17,7 +17,7 @@ public class ScheduleDatabaseManager {
             connection = DriverManager.getConnection("jdbc:sqlite:" + ConfigSingleton.getInstance().getDatabaseFilename());
             Statement statement = connection.createStatement();
             statement.execute("PRAGMA foreign_keys = ON");
-//            System.out.println("Connected to database");
+            System.out.println("Connected to database");
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println("Error with database connection");
             e.printStackTrace();
@@ -36,6 +36,7 @@ public class ScheduleDatabaseManager {
                 throw new IllegalStateException("Connection is " + (connection == null ? "null" : "closed"));
             } else{
                 Statement statement = connection.createStatement();
+                statement.execute("PRAGMA foreign_keys=ON");
                 ResultSet rs = statement.executeQuery(checkForTables);
                 if(rs.getInt(1) > 0){
                     throw new IllegalStateException("Tables already exist");
